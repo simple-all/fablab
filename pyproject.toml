@@ -1,0 +1,20 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fablab"
+version = "0.0.0"
+description = "Fabrication Labratory -- Configuration utility for building Python objects from human-readable JSON"
+readme = "README.md"
+authors = [{ name = "Thomas Satterly", email = "tasat@me.com"}]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["configuration"]
+requires-python = ">=3.8"
