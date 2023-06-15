@@ -198,7 +198,7 @@ class Builder:
             Any: The constructed object.
         """
         # Get the fab information
-        fab_info = config[FabKeys.PRIMARY]
+        fab_info = config[FAB_MARK]
         module_name = fab_info[FabKeys.MODULE]
         class_name = fab_info[FabKeys.CLASS]
 
@@ -207,19 +207,44 @@ class Builder:
         class_obj = getattr(module_obj, class_name)
         instance: object = class_obj.__new__(class_obj)
 
-        # Prepare the configuration dictionary
-        del config[FabKeys.PRIMARY]
-        for key, val in config.items():
-            if isinstance(val, dict) and is_buildable(val):
-                config[key] = self.load_any(val)
-            elif isinstance(val, list):
-                config[key] = self.build_list(val)
-
-        instance.__dict__.update(config)
-
+        memo_id = fab_info[FabKeys.MEMO_ID]
+        self.memo[memo_id] = instance
         self.put(instance)
 
-    dispatch[FabTypes.CLASS_INSTANCE] = load_class
+        fini_job = partial(self.fini_class_instance, config)
+
+        self.jobs.append(fini_job)
+
+    def fini_class_instance(self, config: dict):
+        fab_info = config[FAB_MARK]
+        memo_id = fab_info[FabKeys.MEMO_ID]
+
+        instance: dict = self.memo[memo_id]
+
+        self.push_context()
+        self.push_jobs()
+        for key, val in fab_info[FabKeys.ITEM_DICT].items():
+            self.load_any(key)
+            self.load_any(val)
+
+        self.do_jobs()
+        self.pop_jobs()
+
+        # We expected key-value pairs in the stack, so make sure there's a even number
+        assert len(self.stack) % 2 == 0
+
+        key = None
+        for item in self.stack:
+            if key is None:
+                key = item
+                continue
+
+            instance.__dict__[key] = item
+            key = None
+
+        self.pop_context()
+
+    dispatch[FabTypes.CLASS_INSTANCE] = load_class_instance
 
 
 def load(items: list) -> list:

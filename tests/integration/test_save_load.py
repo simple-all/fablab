@@ -89,8 +89,11 @@ def test_save_load_recursive_tuples():
     assert loaded[2][2] is loaded
 
 
-def test_save_load_class():
-    my_class = MyClass(1.5, 3, "hello!", ["world", "!"], {"one": 1})
+def test_save_load_dataclass():
+    original = MyClass(1.5, 3, "hello!", ["world", "!"], {"one": 1})
 
-    saved = save(my_class)
+    saved = save(original)
     loaded = load(saved)
+
+    assert saved is not loaded
+    assert original == loaded

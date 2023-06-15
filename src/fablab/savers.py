@@ -3,7 +3,6 @@ from typing import Any
 
 
 class Serializer:
-
     _MEM_IGNORE_TYPES = (float, int, str)
 
     def __init__(self):
@@ -197,8 +196,8 @@ class Serializer:
         config = {
             FAB_MARK: {
                 FabKeys.TYPE: FabTypes.CLASS_INSTANCE,
-                FabKeys.CLASS: object.__class__.__name__,
-                FabKeys.MODULE: object.__module__,
+                FabKeys.CLASS: obj.__class__.__name__,
+                FabKeys.MODULE: obj.__module__,
                 FabKeys.MEMO_ID: self.memo[id(obj)][0],
                 FabKeys.ITEM_DICT: saved_items,
             }
