@@ -95,5 +95,5 @@ def test_save_load_dataclass():
     saved = save(original)
     loaded = load(saved)
 
-    assert saved is not loaded
+    assert original is not loaded
     assert original == loaded
