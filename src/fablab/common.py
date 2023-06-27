@@ -13,7 +13,7 @@ class FabKeys:
 
 
 class FabTypes:
-    CLASS = "class"
+    TYPE = "type"
     CLASS_INSTANCE = "class_instance"
     REFERENCE = "reference"
     LIST = "list"

@@ -186,6 +186,24 @@ class Serializer:
 
     dispatch[dict] = save_dict
 
+    def save_type(self, obj: object):
+        """Saves a type.
+
+        Args:
+            obj (object): The object to save.
+        """
+        config = {
+            FAB_MARK: {
+                FabKeys.TYPE: FabTypes.TYPE,
+                FabKeys.CLASS: obj.__name__,
+                FabKeys.MODULE: obj.__module__,
+            }
+        }
+
+        self.put(config)
+
+    dispatch[type] = save_type
+
     def save_class_instance(self, obj: object):
         """Saves a generic class instance.
 

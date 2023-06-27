@@ -47,8 +47,9 @@ class Builder:
 
         while self.jobs:
             self.do_jobs()
-            if self.meta_jobs:
-                self.pop_jobs()
+            # TODO: Investigate if there's ever a case when meta jobs are not completed
+            # if self.meta_jobs:
+            #     self.pop_jobs()
 
         return self.stack[0]
 
@@ -175,7 +176,7 @@ class Builder:
 
     dispatch[FabTypes.REFERENCE] = load_reference
 
-    def load_class(self, config: dict):
+    def load_type(self, config: dict):
         """Builds a class from a FabLab dictionary."""
         fab_info = config[FAB_MARK]
         module_name = fab_info[FabKeys.MODULE]
@@ -186,7 +187,7 @@ class Builder:
 
         self.put(class_obj)
 
-    dispatch[FabTypes.CLASS] = load_class
+    dispatch[FabTypes.TYPE] = load_type
 
     def load_class_instance(self, config: dict):
         """Builds a class instance from a FabLab dictionary.

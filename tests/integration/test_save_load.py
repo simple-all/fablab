@@ -1,5 +1,6 @@
 from fablab import save, load
 from dataclasses import dataclass
+from fablab.utils import binary_equals
 
 
 @dataclass
@@ -89,6 +90,14 @@ def test_save_load_recursive_tuples():
     assert loaded[2][2] is loaded
 
 
+def test_save_load_class():
+    original = MyClass
+
+    saved = save(original)
+    loaded = load(saved)
+    assert loaded is original
+
+
 def test_save_load_dataclass():
     original = MyClass(1.5, 3, "hello!", ["world", "!"], {"one": 1})
 
@@ -96,4 +105,4 @@ def test_save_load_dataclass():
     loaded = load(saved)
 
     assert original is not loaded
-    assert original == loaded
+    assert binary_equals(original, loaded)
