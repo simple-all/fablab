@@ -1,5 +1,5 @@
 import importlib
-from typing import Any
+from typing import Any, List, Dict, Hashable
 from fablab.common import FAB_MARK, FabKeys, FabTypes
 from functools import partial
 
@@ -42,8 +42,8 @@ class Builder:
 
         self.jobs.clear()
 
-    def load(self, config: dict):
-        self.load_any(config)
+    def load(self, items: list):
+        self.load_any(items)
 
         while self.jobs:
             self.do_jobs()
@@ -97,7 +97,7 @@ class Builder:
     def load_list(self, config: dict):
         fab_info = config[FAB_MARK]
         memo_id = fab_info[FabKeys.MEMO_ID]
-        new_list = []
+        new_list: List[Any] = []
         self.memo[memo_id] = new_list
         self.put(new_list)
 
@@ -128,7 +128,7 @@ class Builder:
         fab_info = config[FAB_MARK]
         memo_id = fab_info[FabKeys.MEMO_ID]
 
-        new_dict = {}
+        new_dict: Dict[Hashable, Any] = {}
         self.memo[memo_id] = new_dict
 
         self.put(new_dict)

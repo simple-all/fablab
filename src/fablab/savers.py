@@ -1,14 +1,14 @@
 from fablab.common import FAB_MARK, FabKeys, FabTypes
-from typing import Any
+from typing import Any, Dict, Callable, List, Hashable
 
 
 class Serializer:
     _MEM_IGNORE_TYPES = (float, int, str)
 
     def __init__(self):
-        self.memo = {}
-        self.stack = []
-        self.meta_stack = []
+        self.memo: Dict[int, Any] = {}
+        self.stack: List[Any] = []
+        self.meta_stack: List[Any] = []
 
     def save(self, obj: Any):
         self.save_any(obj)
@@ -68,7 +68,7 @@ class Serializer:
 
     # Methods below this point are dispatched through the dispatch table
 
-    dispatch = {}
+    dispatch: Dict[Any, Callable] = {}
 
     def save_float(self, obj: float):
         """Saves a float.
@@ -106,7 +106,7 @@ class Serializer:
         Args:
             obj (tuple): The tuple to save.
         """
-        saved_items = []
+        saved_items: List[Any] = []
         config = {
             FAB_MARK: {
                 FabKeys.TYPE: FabTypes.TUPLE,
@@ -130,7 +130,7 @@ class Serializer:
         Args:
             obj (list): The list to save.
         """
-        saved_items = []
+        saved_items: List[Any] = []
         config = {
             FAB_MARK: {
                 FabKeys.TYPE: FabTypes.LIST,
@@ -155,7 +155,7 @@ class Serializer:
         Args:
             obj (dict): The dictionary to save.
         """
-        saved_items = {}
+        saved_items: Dict[Hashable, Any] = {}
         config = {
             FAB_MARK: {
                 FabKeys.TYPE: FabTypes.DICT,
@@ -186,7 +186,7 @@ class Serializer:
 
     dispatch[dict] = save_dict
 
-    def save_type(self, obj: object):
+    def save_type(self, obj: type):
         """Saves a type.
 
         Args:
@@ -210,7 +210,7 @@ class Serializer:
         Args:
             obj (object): The object to save.
         """
-        saved_items = {}
+        saved_items: Dict[Hashable, Any] = {}
         config = {
             FAB_MARK: {
                 FabKeys.TYPE: FabTypes.CLASS_INSTANCE,
@@ -229,16 +229,13 @@ class Serializer:
             self.save_any(val)
 
         # We expected key-value pairs in the stack, so make sure there's a even number
-        assert len(self.stack) % 2 == 0
+        if len(self.stack) % 2 != 0:
+            raise ValueError("Unpacking class failed!")
 
-        key = None
-        for item in self.stack:
-            if key is None:
-                key = item
-                continue
-
-            saved_items[key] = item
-            key = None
+        keys = self.stack[0::2]
+        values = self.stack[1::2]
+        for key, value in zip(keys, values):
+            saved_items[key] = value
 
         self.pop_context()
 
