@@ -1,7 +1,8 @@
+from importlib import metadata
 from fablab.savers import save
 from fablab.loaders import load
 
-__version__ = "0.0.1"
+__version__ = metadata.version("fablab")
 
 __all__ = [
     "save",

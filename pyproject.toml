@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fablab"
-version = "0.0.0"
-description = "Fabrication Labratory -- Configuration utility for building Python objects from human-readable JSON"
+version = "0.0.1"
+description = "Fabrication Labratory -- Like pickle, but uses human-readable JSON"
 readme = "README.md"
 authors = [{ name = "Thomas Satterly", email = "tasat@me.com"}]
 license = { file = "LICENSE" }
