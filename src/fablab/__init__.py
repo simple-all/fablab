@@ -1,7 +1,7 @@
 from fablab.savers import save
 from fablab.loaders import load
 
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
 __all__ = [
     "save",
