@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fablab"
-version = "0.0.1"
+version = "0.0.2"
 description = "Fabrication Labratory -- Like pickle, but uses human-readable JSON"
 readme = "README.md"
 authors = [{ name = "Thomas Satterly", email = "tasat@me.com"}]
